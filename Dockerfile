@@ -1,18 +1,18 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
+WORKDIR ShowMeTheGoodsDemo/
 EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["api.csproj", "."]
-RUN dotnet restore "./api.csproj"
+COPY ["ShowMeTheGoodsDemo.csproj", "."]
+RUN dotnet restore "./ShowMeTheGoodsDemo.csproj"
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "api.csproj" -c Release -o /app/build
+WORKDIR "/ShowMeTheGoodsDemo/."
+RUN dotnet build "ShowMeTheGoodsDemo.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ShowMeTheGoodsDemo.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

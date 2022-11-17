@@ -13,6 +13,7 @@ using Videogadon.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -23,12 +24,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+
+
 builder.Services.AddIdentity<SiteRestUser, IdentityRole>()
     .AddEntityFrameworkStores<ShowMeTheGoodsDbContext>()
     .AddDefaultTokenProviders();
 
 
 builder.Services.AddDbContext<ShowMeTheGoodsDbContext>();
+
+
 
 builder.Services.AddAuthentication(options =>
 {

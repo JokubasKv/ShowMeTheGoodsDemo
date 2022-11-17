@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj": {}
+    "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemoGit\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj": {}
   },
   "projects": {
-    "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj": {
+    "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemoGit\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj",
+        "projectUniqueName": "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemoGit\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj",
         "projectName": "ShowMeTheGoodsDemo",
-        "projectPath": "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj",
+        "projectPath": "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemoGit\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo.csproj",
         "packagesPath": "C:\\Users\\X\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemo\\ShowMeTheGoodsDemo\\obj\\",
+        "outputPath": "C:\\Users\\X\\Desktop\\ShowMeTheGoodsDemoGit\\ShowMeTheGoodsDemo\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\X\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -65,6 +65,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.10, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[6.0.7, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

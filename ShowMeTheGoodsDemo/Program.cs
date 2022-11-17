@@ -12,6 +12,7 @@ using ShowMeTheGoodsDemo.Auth;
 using Videogadon.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -78,7 +79,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-var dbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<AuthDbSeeder>();
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<ShowMeTheGoodsDbContext>();
+dbContext.Database.Migrate();
+
+var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
 await dbSeeder.SeedAsync();
 
 app.Run();

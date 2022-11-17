@@ -7,14 +7,20 @@ namespace ShowMeTheGoodsDemo.Data
 {
     public class ShowMeTheGoodsDbContext : IdentityDbContext<SiteRestUser>
     {
+        private readonly IConfiguration _configuration;
 
         public DbSet<EventType> EventsType { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
+        public ShowMeTheGoodsDbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=ShowMeTheGoodDb");
+            optionsBuilder.UseNpgsql("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=ShowMeTheGoodDb");
         }
     }
 }

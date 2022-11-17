@@ -20,7 +20,7 @@ namespace ShowMeTheGoodsDemo.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=ShowMeTheGoodDb");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=ShowMeTheGoodDb");
         }
     }
 }

@@ -21,8 +21,7 @@ namespace ShowMeTheGoodsDemo.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           // string s = _configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-            optionsBuilder.UseSqlServer("");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=ShowMeTheGoodDb");
         }
     }
 }

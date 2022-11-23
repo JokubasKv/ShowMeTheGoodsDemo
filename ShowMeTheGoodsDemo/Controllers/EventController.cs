@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using ShowMeTheGoodsDemo.Auth.Model;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System.Diagnostics;
 
 namespace ShowMeTheGoodsDemo.Controllers
 {
@@ -36,6 +37,7 @@ namespace ShowMeTheGoodsDemo.Controllers
         [HttpGet]
         public async Task<IEnumerable<EventDto>> GetMany()
         {
+
             var events = await _eventRepository.GetManyAsync();
             return events.Select(x => new EventDto(x.Id, x.Name,x.Description, x.Place, x.Price, x.CreationDate, x.EventTypeID));
         }
@@ -51,6 +53,9 @@ namespace ShowMeTheGoodsDemo.Controllers
                 //404
                 return NotFound($"Couldn't find a event type with id of {eventTypeId}");
             }
+            System.Diagnostics.Debug.WriteLine(User);
+            System.Diagnostics.Debug.WriteLine(User.FindFirstValue(JwtRegisteredClaimNames.Sub));
+
 
             var eevent = await _eventRepository.GetAsync(eventTypeId, eventId);
             if (eevent == null) return NotFound($"Couldn't find a event with id of {eventId}"); //404
@@ -138,6 +143,15 @@ namespace ShowMeTheGoodsDemo.Controllers
             {
                 return NotFound($"Couldn't find a user with id of {eventId}");
             }
+
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, eevent, PolicyNames.ResourceOwner);
+
+            if (!authorizationResult.Succeeded)
+            {
+                //404
+                return Forbid();
+            }
+
             await _eventRepository.DeleteAsync(eevent);
 
             //204

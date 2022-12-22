@@ -56,7 +56,7 @@ Sistemos administratorius gales:
 ## 2.	Sistemos architektūra
 Sistemos sudedamosios dalys:
 
-•	Kliento pusė (angl. Front-End)  Angular
+•	Kliento pusė (angl. Front-End)  Rest API
 
 •	Serverio pusė (angl. Back-End)  .NET Core. Duomenų bazė – MySQL
 ![alt text](https://cdn.discordapp.com/attachments/406114988504252419/1032978916740182107/unknown.png)

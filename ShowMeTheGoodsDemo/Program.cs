@@ -12,21 +12,29 @@ using ShowMeTheGoodsDemo.Auth;
 using Videogadon.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 // Add services to the container.
 
+const string corsPolicyName = "ApiCORS";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
-
-
 
 builder.Services.AddIdentity<SiteRestUser, IdentityRole>()
     .AddEntityFrameworkStores<ShowMeTheGoodsDbContext>()
@@ -34,8 +42,6 @@ builder.Services.AddIdentity<SiteRestUser, IdentityRole>()
 
 
 builder.Services.AddDbContext<ShowMeTheGoodsDbContext>();
-
-
 
 builder.Services.AddAuthentication(options =>
 {
@@ -79,6 +85,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+app.UseCors(corsPolicyName);
+
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -86,11 +94,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<ShowMeTheGoodsDbContext>();
-dbContext.Database.Migrate();
-
-var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
+var dbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<AuthDbSeeder>();
 await dbSeeder.SeedAsync();
 
 app.Run();

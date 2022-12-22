@@ -9,6 +9,8 @@ namespace ShowMeTheGoodsDemo.Data.Entities
         public string Name { get; set; }
         public string? Description { get; set; }
 
+        public string? PictureLink { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         //[Required]

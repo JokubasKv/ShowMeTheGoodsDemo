@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using ShowMeTheGoodsDemo.Auth.Model;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace ShowMeTheGoodsDemo.Controllers
 {
@@ -35,11 +35,20 @@ namespace ShowMeTheGoodsDemo.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<EventDto>> GetMany()
+        public async Task<IEnumerable<EventDto>> GetMany(int eventTypeId)
         {
+            var events = await _eventRepository.GetAsync(eventTypeId);
+            Console.WriteLine(events);
+            return events.Select(x => new EventDto(x.Id, x.Name, x.Description, x.Place, x.Price,x.Date,x.PictureLink, x.CreationDate, x.EventTypeID));
+        }
 
+        [HttpGet]
+        [Route("events")]
+        public async Task<IEnumerable<EventDto>> GetEverything()
+        {
             var events = await _eventRepository.GetManyAsync();
-            return events.Select(x => new EventDto(x.Id, x.Name,x.Description, x.Place, x.Price, x.CreationDate, x.EventTypeID));
+            Console.WriteLine(events);
+            return events.Select(x => new EventDto(x.Id, x.Name,x.Description, x.Place, x.Price,x.Date,x.PictureLink, x.CreationDate, x.EventTypeID));
         }
 
         // api/eventType/{eventTypetId}/event/{userId}
@@ -48,19 +57,18 @@ namespace ShowMeTheGoodsDemo.Controllers
         public async Task<ActionResult<EventDto>> Get(int eventTypeId, int eventId)
         {
             var eeventType = await _eventTypeRepository.GetAsync(eventTypeId);
+            Console.WriteLine(eventTypeId);
+            Console.WriteLine(eventId);
             if (eeventType == null)
             {
                 //404
                 return NotFound($"Couldn't find a event type with id of {eventTypeId}");
             }
-            System.Diagnostics.Debug.WriteLine(User);
-            System.Diagnostics.Debug.WriteLine(User.FindFirstValue(JwtRegisteredClaimNames.Sub));
-
 
             var eevent = await _eventRepository.GetAsync(eventTypeId, eventId);
             if (eevent == null) return NotFound($"Couldn't find a event with id of {eventId}"); //404
 
-            return new EventDto(eevent.Id, eevent.Name, eevent.Description, eevent.Place, eevent.Price, eevent.CreationDate, eevent.EventTypeID);
+            return new EventDto(eevent.Id, eevent.Name, eevent.Description, eevent.Place, eevent.Price,eevent.Date,eevent.PictureLink, eevent.CreationDate, eevent.EventTypeID);
         }
 
         // api/eventType/{eventTypetId}/event
@@ -81,6 +89,8 @@ namespace ShowMeTheGoodsDemo.Controllers
                 Description = createEventDto.Description,
                 Place = createEventDto.Place,
                 Price = createEventDto.Price,
+                Date = createEventDto.EventDate,
+                PictureLink = createEventDto.PictureLink,
                 CreationDate = DateTime.Now,
                 UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
             };
@@ -88,7 +98,7 @@ namespace ShowMeTheGoodsDemo.Controllers
             await _eventRepository.CreateAsync(eevent);
 
             //201
-            return Created($"api/eventType/{eventTypeId}/event/{eevent.Id}", new EventDto(eevent.Id, eevent.Name, eevent.Description, eevent.Place, eevent.Price, eevent.CreationDate, eevent.EventTypeID));
+            return Created($"api/eventType/{eventTypeId}/event/{eevent.Id}", new EventDto(eevent.Id, eevent.Name, eevent.Description, eevent.Place, eevent.Price,eevent.Date,eevent.PictureLink, eevent.CreationDate, eevent.EventTypeID));
         }
 
         // api/eventType/{evenTypeId}/event
@@ -121,9 +131,11 @@ namespace ShowMeTheGoodsDemo.Controllers
             eevent.Description = updateEventDto.Description;
             eevent.Place = updateEventDto.Place;
             eevent.Price = updateEventDto.Price;
+            eevent.Date = updateEventDto.EventDate;
+            eevent.PictureLink = updateEventDto.PictureLink;
             await _eventRepository.UpdateAsync(eevent);
 
-            return Ok(new EventDto(eevent.Id, eevent.Name, eevent.Description, eevent.Place, eevent.Price, eevent.CreationDate, eevent.EventTypeID));
+            return Ok(new EventDto(eevent.Id, eevent.Name, eevent.Description, eevent.Place, eevent.Price,eevent.Date,eevent.PictureLink, eevent.CreationDate, eevent.EventTypeID));
 
         }
 
@@ -143,15 +155,6 @@ namespace ShowMeTheGoodsDemo.Controllers
             {
                 return NotFound($"Couldn't find a user with id of {eventId}");
             }
-
-            var authorizationResult = await _authorizationService.AuthorizeAsync(User, eevent, PolicyNames.ResourceOwner);
-
-            if (!authorizationResult.Succeeded)
-            {
-                //404
-                return Forbid();
-            }
-
             await _eventRepository.DeleteAsync(eevent);
 
             //204

@@ -27,22 +27,22 @@ namespace ShowMeTheGoodsDemo.Controllers
         {
             var events = await _eventTypeRepository.GetManyAsync();
 
-            return events.Select(x => new EventTypeDto(x.Id, x.Name, x.Description, x.CreationDate));
+            return events.Select(x => new EventTypeDto(x.Id, x.Name, x.Description,x.PictureLink, x.CreationDate));
         }
 
         // api/events/{eventId}
         [HttpGet]
         [Route("{eventTypeId}", Name = "GetEventType")]
-        public async Task<ActionResult<EventTypeDto>> Get(int eventId)
+        public async Task<ActionResult<EventTypeDto>> Get(int eventTypeId)
         {
-            var eevent = await _eventTypeRepository.GetAsync(eventId);
+            var eevent = await _eventTypeRepository.GetAsync(eventTypeId);
 
             if (eevent == null)
             {
-                return NotFound($"Cant find a event with id {eventId}");// 404
+                return NotFound($"Cant find a event with id {eventTypeId}");// 404
             }
 
-            return new EventTypeDto(eevent.Id, eevent.Name, eevent.Description,  eevent.CreationDate);
+            return new EventTypeDto(eevent.Id, eevent.Name, eevent.Description, eevent.PictureLink,  eevent.CreationDate);
         }
 
         // api/events
@@ -52,42 +52,44 @@ namespace ShowMeTheGoodsDemo.Controllers
             var eevent = new EventType
             { Name = createEventTypeDto.Name,
                 Description = createEventTypeDto.Description,
+                PictureLink = createEventTypeDto.PictureLink,
                 CreationDate = DateTime.UtcNow
             };
 
             await _eventTypeRepository.CreateAsync(eevent);
 
             // 201
-            return Created("", new EventTypeDto(eevent.Id, eevent.Name, eevent.Description, eevent.CreationDate));
+            return Created("", new EventTypeDto(eevent.Id, eevent.Name, eevent.Description,eevent.PictureLink, eevent.CreationDate));
         }
 
         // api/events
         [HttpPut]
         [Route("{eventTypeId}")]
-        public async Task<ActionResult<EventTypeDto>> Update(int eventId, UpdateEventTypeDto updateEventsDto)
+        public async Task<ActionResult<EventTypeDto>> Update(int eventTypeId, UpdateEventTypeDto updateEventsDto)
         {
-            var eevent = await _eventTypeRepository.GetAsync(eventId);
+            var eevent = await _eventTypeRepository.GetAsync(eventTypeId);
 
             if (eevent == null)
             {
-                return NotFound($"Cant find a event with id {eventId}"); // 404
+                return NotFound($"Cant find a event with id {eventTypeId}"); // 404
             }
             eevent.Description = updateEventsDto.Description;
+            eevent.PictureLink = updateEventsDto.PictureLink;
             await _eventTypeRepository.UpdateAsync(eevent);
 
-            return Ok(new EventTypeDto(eevent.Id, eevent.Name, eevent.Description, eevent.CreationDate));
+            return Ok(new EventTypeDto(eevent.Id, eevent.Name, eevent.Description,eevent.PictureLink, eevent.CreationDate));
         }
 
         // api/events/{eventId}
         [HttpDelete]
         [Route("{eventTypeId}")]
-        public async Task<ActionResult> Remove(int eventId)
+        public async Task<ActionResult> Remove(int eventTypeId)
         {
-            var eevent = await _eventTypeRepository.GetAsync(eventId);
+            var eevent = await _eventTypeRepository.GetAsync(eventTypeId);
 
             if (eevent == null)
             {
-                return NotFound($"Cant find a event with id {eventId}"); // 404
+                return NotFound($"Cant find a event with id {eventTypeId}"); // 404
             }
             await _eventTypeRepository.DeleteAsync(eevent);
 

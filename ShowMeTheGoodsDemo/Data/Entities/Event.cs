@@ -11,6 +11,7 @@ namespace ShowMeTheGoodsDemo.Data.Entities
         public string? Place { get; set; }
         public float Price { get; set; }
         public DateTime Date { get; set; }
+        public string? PictureLink { get; set; }
         public DateTime CreationDate { get; set; }
         public EventType EventType { get; set; }
 

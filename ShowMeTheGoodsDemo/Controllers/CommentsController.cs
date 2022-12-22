@@ -33,9 +33,9 @@ namespace ShowMeTheGoodsDemo.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CommentDto>> GetMany()
+        public async Task<IEnumerable<CommentDto>> GetMany(int eventId)
         {
-            var comments = await _commentsRepository.GetAsync();
+            var comments = await _commentsRepository.GetAsync(eventId);
             return comments.Select(x => new CommentDto(x.Id, x.Content, x.CreationDate, x.EventID));
         }
 

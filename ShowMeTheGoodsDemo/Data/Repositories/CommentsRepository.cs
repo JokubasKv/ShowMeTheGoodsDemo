@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ShowMeTheGoodsDemo.Data.Entities;
 
 namespace ShowMeTheGoodsDemo.Data.Reposotories
@@ -6,6 +7,7 @@ namespace ShowMeTheGoodsDemo.Data.Reposotories
     public interface ICommentsRepository
     {
         Task<Comment> GetAsync(int eeventId, int commentId);
+        Task<List<Comment?>> GetAsync(int eeventId);
         Task<List<Comment?>> GetAsync();
         //Task<IReadOnlyList<Comment>> GetManyAsync();
         Task CreateAsync(Comment comment);
@@ -27,6 +29,10 @@ namespace ShowMeTheGoodsDemo.Data.Reposotories
             return await _smtgDbContext.Comments.FirstOrDefaultAsync(x => x.EventID == eeventId && x.Id == commentId);
         }
 
+        public async Task<List<Comment>> GetAsync(int eeventId)
+        {
+            return await _smtgDbContext.Comments.Where(x => x.EventID == eeventId).ToListAsync();
+        }
         public async Task<List<Comment>> GetAsync()
         {
             return await _smtgDbContext.Comments.ToListAsync();
